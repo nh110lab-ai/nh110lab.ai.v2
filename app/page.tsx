@@ -3,34 +3,47 @@
 import { motion } from "framer-motion";
 import { DevisExpress } from "./components/DevisExpress";
 
-const sectionVariants = {
+const fadeUp = {
   hidden: { opacity: 0, y: 40 },
   visible: { opacity: 1, y: 0 },
 };
+
+const stagger = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.12,
+    },
+  },
+};
+
+const sectionTransition = { duration: 0.6, ease: "easeOut" };
 
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-slate-950 text-slate-50">
       {/* NAVBAR */}
-      <header className="sticky top-0 z-30 border-b border-white/5 bg-slate-950/70 backdrop-blur-xl">
+      <header className="sticky top-0 z-40 border-b border-white/10 bg-slate-950/80 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-2">
-            <span className="h-6 w-6 rounded-lg bg-gradient-to-br from-sky-400 to-emerald-300" />
-            <span className="text-xs font-semibold tracking-[0.25em] uppercase text-slate-200">
-              NH110LAB.ai
+            <div className="relative h-7 w-7 rounded-xl bg-gradient-to-br from-sky-400 via-emerald-300 to-violet-400">
+              <div className="absolute inset-0 rounded-xl bg-black/40" />
+            </div>
+            <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-slate-200">
+              NH110LAB.AI
             </span>
           </div>
-          <nav className="hidden gap-6 text-xs md:flex">
+          <nav className="hidden gap-6 text-[11px] md:flex">
             <a href="#hero" className="hover:text-slate-200">
-              Services
+              Vision
             </a>
-            <a href="#devis" className="hover:text-slate-200">
-              Devis
+            <a href="#system" className="hover:text-slate-200">
+              Système
             </a>
             <a href="#cas-clients" className="hover:text-slate-200">
               Cas clients
             </a>
-            <a href="#cas-usage" className="hover:text-slate-200">
+            <a href="#usage" className="hover:text-slate-200">
               Cas d&apos;usage
             </a>
             <a href="#offres" className="hover:text-slate-200">
@@ -39,58 +52,72 @@ export default function HomePage() {
             <a href="#faq" className="hover:text-slate-200">
               FAQ
             </a>
-            <a href="#contact" className="hover:text-slate-200">
-              Contact
-            </a>
           </nav>
           <a
             href="#contact"
-            className="rounded-full border border-white/15 px-3 py-1.5 text-xs font-medium hover:bg-white hover:text-slate-950 transition-colors"
+            className="rounded-full border border-white/15 px-3 py-1.5 text-[11px] font-medium hover:bg-white hover:text-slate-950 transition-colors"
           >
             Démarrer un projet
           </a>
         </div>
       </header>
 
-      {/* HERO */}
+      {/* HERO avec background “vivant” */}
       <section
         id="hero"
-        className="relative overflow-hidden border-b border-white/5"
+        className="relative overflow-hidden border-b border-white/10"
       >
-        {/* Background animé */}
+        {/* décor : blobs + grille */}
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute -top-32 -left-24 h-80 w-80 rounded-full bg-sky-500/20 blur-3xl" />
-          <div className="absolute top-40 -right-10 h-80 w-80 rounded-full bg-emerald-400/15 blur-3xl" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_#22d3ee22,_transparent_60%),radial-gradient(circle_at_bottom,_#0ea5e922,_transparent_60%)]" />
+          <div className="absolute -top-40 -left-32 h-96 w-96 rounded-full bg-sky-500/25 blur-3xl animate-pulse" />
+          <div className="absolute -bottom-32 -right-20 h-96 w-96 rounded-full bg-emerald-400/20 blur-3xl animate-[ping_4s_ease-in-out_infinite]" />
+          <div className="absolute inset-0 opacity-20 [background-image:radial-gradient(circle_at_1px_1px,#1f293780,transparent_0)] [background-size:24px_24px]" />
         </div>
 
         <div className="relative mx-auto flex max-w-6xl flex-col gap-12 px-4 py-20 md:flex-row md:items-center">
+          {/* Colonne texte */}
           <motion.div
-            initial={{ opacity: 0, y: 32 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: "easeOut" }}
+            variants={stagger}
+            initial="hidden"
+            animate="visible"
             className="max-w-xl"
           >
-            <p className="text-xs uppercase tracking-[0.3em] text-slate-400">
-              Studio IA &amp; automatisation premium
-            </p>
-            <h1 className="mt-4 text-3xl font-semibold leading-tight md:text-5xl">
-              Des expériences digitales
-              <span className="block text-sky-300">
-                ultra-premium propulsées par l&apos;IA.
-              </span>
-            </h1>
-            <p className="mt-4 text-sm text-slate-300 md:text-base">
-              Votre système complet : agents IA, automatisations, sites rapides
-              et front minimaliste. Pensé pour créateurs, petites structures et
-              marques digitales qui veulent des résultats visibles, pas un
-              énième jouet IA.
-            </p>
+            <motion.p
+              variants={fadeUp}
+              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/40 px-3 py-1 text-[10px] uppercase tracking-[0.25em] text-slate-300"
+            >
+              Studio IA &amp; automatisation
+              <span className="h-1 w-1 rounded-full bg-emerald-300" />
+            </motion.p>
 
-            <div className="mt-6 flex flex-wrap items-center gap-3">
+            <motion.h1
+              variants={fadeUp}
+              className="mt-4 text-[2.2rem] font-semibold leading-tight md:text-[3rem]"
+            >
+              Un système complet
+              <span className="block bg-gradient-to-r from-sky-300 via-emerald-300 to-violet-300 bg-clip-text text-transparent">
+                sites, agents IA &amp; automatisations
+              </span>
+              conçu pour les petites structures qui pensent comme des grandes.
+            </motion.h1>
+
+            <motion.p
+              variants={fadeUp}
+              className="mt-4 text-sm text-slate-300 md:text-base"
+            >
+              NH110LAB.ai combine un front ultra propre, des agents IA alignés à
+              votre ton et des automatisations bien câblées. Objectif : gagner
+              du temps, donner une impression “grosse boîte” et rester simple à
+              piloter.
+            </motion.p>
+
+            <motion.div
+              variants={fadeUp}
+              className="mt-6 flex flex-wrap items-center gap-3"
+            >
               <a
                 href="#devis"
-                className="rounded-full bg-white px-5 py-2.5 text-xs font-semibold text-slate-950 shadow-lg shadow-sky-500/20 hover:shadow-sky-500/40 transition-shadow"
+                className="rounded-full bg-white px-5 py-2.5 text-xs font-semibold text-slate-950 shadow-lg shadow-sky-500/25 hover:shadow-sky-500/50 transition-shadow"
               >
                 Devis express en 30s
               </a>
@@ -98,149 +125,135 @@ export default function HomePage() {
                 href="#cas-clients"
                 className="text-xs text-slate-200 hover:text-white"
               >
-                Voir les cas clients →
+                Voir des cas concrets →
               </a>
-            </div>
+            </motion.div>
 
-            <div className="mt-6 flex flex-wrap gap-2 text-[11px] text-slate-300">
-              <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">
-                ⚡ Prototypes rapides
+            <motion.div
+              variants={fadeUp}
+              className="mt-6 flex flex-wrap gap-2 text-[11px] text-slate-300"
+            >
+              <span className="rounded-full border border-white/10 bg-black/40 px-3 py-1">
+                ⚡ Prototypes en 2–4 semaines
               </span>
-              <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">
-                🤖 Agents IA dédiés
+              <span className="rounded-full border border-white/10 bg-black/40 px-3 py-1">
+                🤖 Agents IA sur mesure
               </span>
-              <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">
-                🔁 Automatisation concrète
+              <span className="rounded-full border border-white/10 bg-black/40 px-3 py-1">
+                🔁 Workflows automatisés
               </span>
-            </div>
+            </motion.div>
           </motion.div>
 
-          {/* Carte système / focus / process */}
+          {/* Colonne droite : “carte système” flottante */}
           <motion.div
-            initial={{ opacity: 0, x: 40 }}
+            initial={{ opacity: 0, x: 60 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7, ease: "easeOut", delay: 0.1 }}
+            transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
             className="relative flex-1"
           >
-            <div className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl shadow-2xl">
-              <div className="mb-4 flex items-center justify-between text-xs text-slate-300">
-                <span>NH110LAB / System</span>
+            <motion.div
+              animate={{ y: [-6, 6, -6] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              className="rounded-3xl border border-white/10 bg-gradient-to-br from-slate-900/90 via-slate-900/70 to-slate-900/90 p-5 backdrop-blur-2xl shadow-2xl"
+            >
+              <div className="mb-4 flex items-center justify-between text-[11px] text-slate-300">
+                <span>NH110LAB / Operating System</span>
                 <span className="rounded-full border border-emerald-300/40 bg-emerald-300/10 px-3 py-1 text-[10px] text-emerald-200">
-                  Concret &amp; déployable
+                  Modulaire &amp; concret
                 </span>
               </div>
 
-              <div className="grid gap-4 text-xs md:grid-cols-2">
+              <div className="grid gap-4 text-[11px] md:grid-cols-2">
                 <div>
                   <p className="text-[10px] uppercase tracking-[0.2em] text-slate-400">
-                    Focus
+                    Front
                   </p>
                   <p className="mt-2 text-slate-200">
-                    Agents IA + automatisations + front. Construits sur mesure
-                    selon vos outils, vos flux et votre tempo.
+                    Sites &amp; interfaces ultra minimalistes, optimisés pour
+                    la perception de sérieux et la clarté.
                   </p>
                 </div>
                 <div>
                   <p className="text-[10px] uppercase tracking-[0.2em] text-slate-400">
-                    Process
+                    Agents IA
                   </p>
-                  <ul className="mt-2 space-y-1 text-slate-200">
-                    <li>1. Diagnostic express (30 min)</li>
-                    <li>2. Prototype IA + front</li>
-                    <li>3. Mise en production</li>
-                  </ul>
+                  <p className="mt-2 text-slate-200">
+                    Agents spécialisés (support, sales, back-office) qui
+                    respectent vos règles et votre ton.
+                  </p>
                 </div>
               </div>
 
               <div className="mt-4 grid gap-3 text-[11px] md:grid-cols-3">
                 <div className="rounded-2xl border border-white/10 bg-white/5 p-3">
-                  <p className="text-slate-400">Sites &amp; front</p>
-                  <p className="mt-1 text-slate-200">
-                    Interfaces rapides, élégantes, branchées à vos outils.
-                  </p>
-                </div>
-                <div className="rounded-2xl border border-white/10 bg-white/5 p-3">
-                  <p className="text-slate-400">Agents IA</p>
-                  <p className="mt-1 text-slate-200">
-                    Des agents spécialisés alignés avec votre ton &amp; vos
-                    règles.
-                  </p>
-                </div>
-                <div className="rounded-2xl border border-white/10 bg-white/5 p-3">
                   <p className="text-slate-400">Automatisation</p>
                   <p className="mt-1 text-slate-200">
-                    Connexions entre tous vos outils pour supprimer le
-                    répétitif.
+                    n8n / Make / Zapier / APIs pour relier vos outils.
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-white/10 bg-white/5 p-3">
+                  <p className="text-slate-400">Monitoring</p>
+                  <p className="mt-1 text-slate-200">
+                    Suivi clair : où l&apos;IA aide, où l&apos;humain garde la
+                    main.
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-white/10 bg-white/5 p-3">
+                  <p className="text-slate-400">Évolutif</p>
+                  <p className="mt-1 text-slate-200">
+                    On commence petit, on élargit cas d&apos;usage par cas
+                    d&apos;usage.
                   </p>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* CE QUE JE CONSTRUIS */}
+      {/* SYSTÈME */}
       <motion.section
-        id="services"
-        className="border-b border-white/5 py-16"
-        variants={sectionVariants}
+        id="system"
+        className="border-b border-white/10 py-16"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
-        transition={{ duration: 0.5 }}
+        variants={fadeUp}
+        transition={sectionTransition}
       >
         <div className="mx-auto max-w-6xl px-4">
-          <div className="mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-            <div>
-              <p className="text-xs uppercase tracking-[0.25em] text-slate-400">
-                Ce que je construis
-              </p>
-              <h2 className="mt-2 text-2xl font-semibold md:text-3xl">
-                Des briques IA concrètes, utiles
-                <br />
-                et prêtes à l&apos;emploi.
-              </h2>
-            </div>
-          </div>
+          <p className="text-[11px] uppercase tracking-[0.25em] text-slate-400">
+            Architecture
+          </p>
+          <h2 className="mt-2 text-2xl font-semibold md:text-3xl">
+            Un système pensé comme une grande boîte,
+            <br />
+            mais dimensionné pour vous.
+          </h2>
 
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className="mt-8 grid gap-4 md:grid-cols-3">
             {[
               {
-                title: "Sites & expériences front",
-                points: [
-                  "Sites ultra rapides, minimalistes et premium",
-                  "Mobile-first, focus conversion",
-                  "Connexion CRM / Notion / calendriers",
-                ],
+                title: "Couche front",
+                desc: "Sites, mini-apps, back-office minimalistes pour exposer l'IA de façon claire et premium.",
               },
               {
-                title: "Agents IA intelligents",
-                points: [
-                  "Agents commerciaux, support, qualification",
-                  "Alignés sur votre ton & vos règles",
-                  "Toujours branchés à vos données",
-                ],
+                title: "Couche IA",
+                desc: "Prompts structurés, règles métier explicites, modèles adaptés au contexte et au budget.",
               },
               {
-                title: "Automatisation & workflows",
-                points: [
-                  "n8n / Make / Zapier / intégrations custom",
-                  "Relances, tri, routage, reporting",
-                  "Alertes intelligentes au bon moment",
-                ],
+                title: "Couche automatisation",
+                desc: "Workflows pour orchestrer e-mails, CRM, DM, formulaires, fichiers, agendas…",
               },
-            ].map((block) => (
+            ].map((b) => (
               <motion.div
-                key={block.title}
+                key={b.title}
                 whileHover={{ y: -4, scale: 1.01 }}
-                className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 shadow-[0_0_0_1px_rgba(15,23,42,0.6)]"
+                className="rounded-2xl border border-white/10 bg-white/[0.03] p-5"
               >
-                <h3 className="text-sm font-semibold">{block.title}</h3>
-                <ul className="mt-3 space-y-1.5 text-xs text-slate-300">
-                  {block.points.map((p) => (
-                    <li key={p}>• {p}</li>
-                  ))}
-                </ul>
+                <h3 className="text-sm font-semibold">{b.title}</h3>
+                <p className="mt-2 text-xs text-slate-300">{b.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -253,42 +266,36 @@ export default function HomePage() {
       {/* CAS CLIENTS */}
       <motion.section
         id="cas-clients"
-        className="border-t border-b border-white/5 py-16"
-        variants={sectionVariants}
+        className="border-b border-white/10 py-16"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
-        transition={{ duration: 0.5 }}
+        variants={fadeUp}
+        transition={sectionTransition}
       >
         <div className="mx-auto max-w-6xl px-4">
-          <p className="text-xs uppercase tracking-[0.25em] text-slate-400">
-            Cas clients
+          <p className="text-[11px] uppercase tracking-[0.25em] text-slate-400">
+            Cas clients (anonymisés)
           </p>
           <h2 className="mt-2 text-2xl font-semibold md:text-3xl">
-            3 contextes différents, même logique :
+            Trois contextes, trois systèmes IA,
             <br />
-            clarté + IA utile.
+            une même logique : temps gagné &amp; image renforcée.
           </h2>
 
           <div className="mt-8 grid gap-4 md:grid-cols-3">
             {[
               {
-                label: "Indépendant",
-                quote:
-                  "Avant : plusieurs heures par jour dans les mails. Maintenant, un agent IA filtre et prépare les réponses : je ne garde que l'essentiel.",
-                author: "Consultant solo",
+                label: "Créateur / infopreneur",
+                text: "Tri intelligent des DM, préparation des réponses aux marques, suivi des opportunités sponsorisées dans un seul tableau.",
               },
               {
-                label: "Restauration",
-                quote:
-                  "Les réservations arrivent de partout. L'IA centralise, répond aux questions simples et ne nous alerte que quand c'est nécessaire.",
-                author: "Gérant de restaurant",
+                label: "Boutique en ligne",
+                text: "Support client IA pour questions simples, suivi colis automatisé, escalade des cas sensibles vers l'humain.",
               },
               {
-                label: "E-commerce",
-                quote:
-                  "Le support client est transformé : l'IA gère le simple et récurrent, on garde l'humain sur le sensible. Le taux de réponse a doublé.",
-                author: "Boutique en ligne",
+                label: "Restaurant / lieu physique",
+                text: "Agent de réservation connecté aux messageries et Google, centralisation des demandes et rappel automatique des no-show.",
               },
             ].map((c) => (
               <div
@@ -299,9 +306,12 @@ export default function HomePage() {
                   <p className="text-[11px] uppercase tracking-[0.2em] text-slate-400">
                     {c.label}
                   </p>
-                  <p className="mt-3 text-xs text-slate-200">{c.quote}</p>
+                  <p className="mt-3 text-xs text-slate-200">{c.text}</p>
                 </div>
-                <p className="mt-4 text-[11px] text-slate-400">— {c.author}</p>
+                <p className="mt-4 text-[11px] text-slate-500">
+                  Résultat : moins de charge mentale, plus de répondant, image
+                  plus pro.
+                </p>
               </div>
             ))}
           </div>
@@ -310,128 +320,65 @@ export default function HomePage() {
 
       {/* CAS D'USAGE */}
       <motion.section
-        id="cas-usage"
-        className="border-b border-white/5 py-16"
-        variants={sectionVariants}
+        id="usage"
+        className="border-b border-white/10 py-16"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
-        transition={{ duration: 0.5 }}
+        variants={fadeUp}
+        transition={sectionTransition}
       >
         <div className="mx-auto max-w-6xl px-4">
-          <p className="text-xs uppercase tracking-[0.25em] text-slate-400">
-            Cas d&apos;usage
+          <p className="text-[11px] uppercase tracking-[0.25em] text-slate-400">
+            Cas d&apos;usage typiques
           </p>
           <h2 className="mt-2 text-2xl font-semibold md:text-3xl">
-            Des exemples concrets qui transforment le quotidien.
+            Des briques concrètes, branchées sur vos outils existants.
           </h2>
 
           <div className="mt-8 grid gap-6 md:grid-cols-2">
             {[
               {
-                title: "Créateur / Influenceur",
+                title: "Avant-vente & qualification",
                 items: [
-                  "Tri automatique des DM (fans / pro / spam)",
-                  "Préparation des réponses pour les marques",
-                  "Tableau centralisé des opportunités",
+                  "Agent IA sur votre site / Notion pour filtrer les leads.",
+                  "Synthèse automatique des demandes entrantes.",
+                  "Proposition de next-step (call, doc, offre).",
                 ],
               },
               {
-                title: "Freelance / Consultant",
+                title: "Support & back-office",
                 items: [
-                  "Agent de qualification des leads",
-                  "Relances automatisées & priorisées",
-                  "Résumé instantané des demandes entrantes",
+                  "Réponses IA aux questions récurrentes (FAQ, procédures).",
+                  "Préparation de brouillons d'e-mails pour votre équipe.",
+                  "Routage vers la bonne personne quand c'est sensible.",
                 ],
               },
               {
-                title: "E-commerce",
+                title: "Ops & automatisation",
                 items: [
-                  "Support IA + suivi colis automatisé",
-                  "Emails post-achat optimisés",
-                  "Retour client semi-automatisé",
+                  "Mise à jour CRM à partir de mails / formulaires.",
+                  "Relances intelligentes sur les demandes dormantes.",
+                  "Alertes sur les signaux faibles importants.",
                 ],
               },
               {
-                title: "Restauration / Local",
+                title: "Image & perception",
                 items: [
-                  "Agent de réservation multi-canaux",
-                  "Réponses FAQ instantanées (horaires, menu…)",
-                  "Centralisation Messenger / Insta / Google",
+                  "Front minimaliste & rapide qui inspire confiance.",
+                  "Messages cohérents, ton maîtrisé sur tous les canaux.",
+                  "Impression de “grosse boîte” sans l'usine à gaz.",
                 ],
               },
-            ].map((block) => (
+            ].map((u) => (
               <div
-                key={block.title}
+                key={u.title}
                 className="rounded-2xl border border-white/10 bg-white/[0.03] p-5"
               >
-                <h3 className="text-sm font-semibold">{block.title}</h3>
+                <h3 className="text-sm font-semibold">{u.title}</h3>
                 <ul className="mt-3 space-y-1.5 text-xs text-slate-300">
-                  {block.items.map((i) => (
+                  {u.items.map((i) => (
                     <li key={i}>• {i}</li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </div>
-      </motion.section>
-
-      {/* STACK & MÉTHODE */}
-      <motion.section
-        id="stack"
-        className="border-b border-white/5 py-16"
-        variants={sectionVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
-        transition={{ duration: 0.5 }}
-      >
-        <div className="mx-auto max-w-6xl px-4">
-          <p className="text-xs uppercase tracking-[0.25em] text-slate-400">
-            Stack &amp; méthode
-          </p>
-          <h2 className="mt-2 text-2xl font-semibold md:text-3xl">
-            Tech minimaliste, robuste, documentée
-            <br />
-            et simple à maintenir.
-          </h2>
-
-          <div className="mt-8 grid gap-4 md:grid-cols-3">
-            {[
-              {
-                title: "IA & langage",
-                points: [
-                  "Prompts structurés & versionnés",
-                  "Règles métier explicites",
-                  "Suivi des interactions & logs",
-                ],
-              },
-              {
-                title: "Automatisation",
-                points: [
-                  "n8n, Make, Zapier & intégrations custom",
-                  "Scénarios intelligents et monitorés",
-                  "Alertes & rapports digestes",
-                ],
-              },
-              {
-                title: "Front & UI",
-                points: [
-                  "Interfaces légères & premium",
-                  "Animations sobres mais luxueuses",
-                  "Responsive par défaut",
-                ],
-              },
-            ].map((b) => (
-              <div
-                key={b.title}
-                className="rounded-2xl border border-white/10 bg-white/[0.03] p-5"
-              >
-                <h3 className="text-sm font-semibold">{b.title}</h3>
-                <ul className="mt-3 space-y-1.5 text-xs text-slate-300">
-                  {b.points.map((p) => (
-                    <li key={p}>• {p}</li>
                   ))}
                 </ul>
               </div>
@@ -443,31 +390,29 @@ export default function HomePage() {
       {/* OFFRES */}
       <motion.section
         id="offres"
-        className="border-b border-white/5 py-16"
-        variants={sectionVariants}
+        className="border-b border-white/10 py-16"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
-        transition={{ duration: 0.5 }}
+        variants={fadeUp}
+        transition={sectionTransition}
       >
         <div className="mx-auto max-w-6xl px-4">
-          <p className="text-xs uppercase tracking-[0.25em] text-slate-400">
+          <p className="text-[11px] uppercase tracking-[0.25em] text-slate-400">
             Offres
           </p>
           <h2 className="mt-2 text-2xl font-semibold md:text-3xl">
-            Un pilote pour démarrer.
-            <br />
-            Un mode run pour faire grandir le système.
+            Un pilote IA clair. Un mode run pour faire mûrir le système.
           </h2>
 
           <div className="mt-8 grid gap-4 md:grid-cols-2">
             <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-              <h3 className="text-sm font-semibold">Pilote IA concret</h3>
+              <h3 className="text-sm font-semibold">Pilote IA complet</h3>
               <p className="mt-2 text-sm text-sky-300">1 500 – 3 500 €</p>
               <ul className="mt-3 space-y-1.5 text-xs text-slate-300">
                 <li>• 1–2 cas d&apos;usage ciblés</li>
-                <li>• Prototype IA livrable &amp; testable</li>
-                <li>• Documentation simple</li>
+                <li>• Prototype IA + front livrable & testable</li>
+                <li>• Connexion aux outils critiques</li>
                 <li>• Session de prise en main</li>
               </ul>
               <a
@@ -478,19 +423,19 @@ export default function HomePage() {
               </a>
             </div>
             <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-              <h3 className="text-sm font-semibold">Run &amp; évolutions</h3>
+              <h3 className="text-sm font-semibold">Run & évolutions</h3>
               <p className="mt-2 text-sm text-emerald-300">Sur mesure</p>
               <ul className="mt-3 space-y-1.5 text-xs text-slate-300">
-                <li>• Amélioration continue des agents &amp; workflows</li>
-                <li>• Ajout de nouveaux cas d&apos;usage</li>
-                <li>• Suivi, métriques, optimisation</li>
+                <li>• Ajout progressif de nouveaux cas d&apos;usage</li>
+                <li>• Optimisation continue des prompts & flux</li>
+                <li>• Suivi des métriques & ajustements</li>
                 <li>• Support prioritaire</li>
               </ul>
               <a
                 href="#contact"
                 className="mt-4 inline-flex text-xs text-slate-200 hover:text-white"
               >
-                Parler du mode run →
+                Construire un mode run →
               </a>
             </div>
           </div>
@@ -500,52 +445,58 @@ export default function HomePage() {
       {/* FAQ */}
       <motion.section
         id="faq"
-        className="border-b border-white/5 py-16"
-        variants={sectionVariants}
+        className="border-b border-white/10 py-16"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
-        transition={{ duration: 0.5 }}
+        variants={fadeUp}
+        transition={sectionTransition}
       >
         <div className="mx-auto max-w-4xl px-4">
-          <p className="text-xs uppercase tracking-[0.25em] text-slate-400">
+          <p className="text-[11px] uppercase tracking-[0.25em] text-slate-400">
             FAQ
           </p>
           <h2 className="mt-2 text-2xl font-semibold md:text-3xl">
-            Quelques réponses rapides.
+            Quelques réponses rapides avant de m&apos;écrire.
           </h2>
 
           <div className="mt-8 space-y-4 text-sm text-slate-200">
             <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4">
               <p className="font-medium">
-                Combien de temps prend un pilote complet ?
+                Combien de temps pour avoir quelque chose de concret ?
               </p>
               <p className="mt-2 text-xs text-slate-300">
-                En général entre 2 et 4 semaines pour quelque chose de concret
-                et testable par vos équipes ou vos clients.
+                En général 2 à 4 semaines pour un pilote clair, utilisable en
+                réel par vos équipes ou vos clients.
               </p>
             </div>
             <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4">
               <p className="font-medium">
-                Est-ce que vous travaillez avec des petites structures ?
+                Est-ce réservé aux “grosses boîtes” ?
               </p>
               <p className="mt-2 text-xs text-slate-300">
-                Oui, c&apos;est même le cœur du studio : créateurs, freelances,
-                boutiques en ligne, restaurants, TPE.
-              </p>
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4">
-              <p className="font-medium">Est-ce que je garde la main ?</p>
-              <p className="mt-2 text-xs text-slate-300">
-                Toujours. Vous avez la doc, les accès, et la possibilité de
-                continuer seul si vous le souhaitez.
+                Non. Le studio est pensé pour les indépendants, TPE, petites
+                équipes qui veulent un niveau de système digne d&apos;une plus
+                grosse structure.
               </p>
             </div>
             <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4">
-              <p className="font-medium">Proposez-vous un suivi ?</p>
+              <p className="font-medium">
+                Est-ce que je garde la main sur la stack ?
+              </p>
               <p className="mt-2 text-xs text-slate-300">
-                Oui, c&apos;est le rôle du mode Run : on améliore, on étend, on
-                monitore dans la durée.
+                Oui. Vous gardez les accès, la doc, la structure. Vous pouvez
+                continuer seul ou en mode run avec moi.
+              </p>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4">
+              <p className="font-medium">
+                Comment se passe le premier contact ?
+              </p>
+              <p className="mt-2 text-xs text-slate-300">
+                Vous m&apos;envoyez un contexte via le formulaire. On cale un
+                call de 30 minutes pour clarifier, puis je reviens avec un plan
+                et un chiffrage.
               </p>
             </div>
           </div>
@@ -556,28 +507,28 @@ export default function HomePage() {
       <motion.section
         id="contact"
         className="py-16"
-        variants={sectionVariants}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
-        transition={{ duration: 0.5 }}
+        variants={fadeUp}
+        transition={sectionTransition}
       >
         <div className="mx-auto max-w-3xl px-4">
-          <p className="text-xs uppercase tracking-[0.25em] text-slate-400">
-            Contact &amp; brief
+          <p className="text-[11px] uppercase tracking-[0.25em] text-slate-400">
+            Contact & brief
           </p>
           <h2 className="mt-2 text-2xl font-semibold md:text-3xl">
-            Décrivez votre besoin.
+            Décrivez votre contexte. Je m&apos;occupe du reste.
           </h2>
           <p className="mt-3 text-sm text-slate-300">
-            Quelques lignes suffisent. Je reviens vers vous avec une proposition
-            claire, sans jargon ni roman de consultant.
+            Quelques lignes suffisent : qui vous êtes, ce qui vous prend du
+            temps, ce que vous voudriez déléguer à un système IA bien pensé.
           </p>
 
           <form className="mt-8 space-y-4">
             <div>
               <label className="text-xs text-slate-300">
-                Nom / Structure
+                Nom / structure
               </label>
               <input
                 className="mt-1 w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm outline-none focus:border-white/40"
@@ -593,27 +544,29 @@ export default function HomePage() {
               />
             </div>
             <div>
-              <label className="text-xs text-slate-300">Votre projet</label>
+              <label className="text-xs text-slate-300">
+                Votre situation actuelle
+              </label>
               <textarea
                 rows={4}
                 className="mt-1 w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm outline-none focus:border-white/40"
-                placeholder="Contexte, objectifs, outils actuels, ce que vous aimeriez automatiser ou confier à un agent IA..."
+                placeholder="Quels canaux ? (site, Insta, mails…) Qu'est-ce qui vous prend le plus de temps ? Quel serait un résultat “waouh” pour vous ?"
               />
             </div>
             <button
               type="submit"
-              className="rounded-full bg-white px-5 py-2.5 text-xs font-semibold text-slate-950 shadow-lg shadow-sky-500/20 hover:shadow-sky-500/40"
+              className="rounded-full bg-white px-5 py-2.5 text-xs font-semibold text-slate-950 shadow-lg shadow-sky-500/25 hover:shadow-sky-500/50"
             >
               Envoyer
             </button>
           </form>
 
-          <p className="mt-4 text-xs text-slate-500">
-            Réponse sous 24–48h. Pas de spam, pas de séquence automatique.
+          <p className="mt-4 text-[11px] text-slate-500">
+            Réponse sous 24–48h. Pas de séquence automatique, pas de spam.
           </p>
 
-          <div className="mt-10 border-t border-white/5 pt-6 text-[11px] text-slate-500">
-            <p>NH110LAB.ai — Studio IA &amp; automatisation premium.</p>
+          <div className="mt-10 border-t border-white/10 pt-6 text-[11px] text-slate-500">
+            <p>NH110LAB.ai — Studio IA & automatisation premium.</p>
             <p className="mt-2">
               © {new Date().getFullYear()} NH110LAB.ai — Tous droits
               réservés.
