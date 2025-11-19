@@ -12,9 +12,7 @@ const fadeUp = {
 const stagger = {
   hidden: {},
   visible: {
-    transition: {
-      staggerChildren: 0.12,
-    },
+    transition: { staggerChildren: 0.12 },
   },
 };
 
@@ -34,12 +32,14 @@ export default function HomePage() {
       setScrollProgress(progress);
 
       // alternance auto clair / sombre selon la hauteur scrollée
-      if (progress < 0.33) {
+      if (progress < 0.25) {
         setTheme("dark");
-      } else if (progress < 0.66) {
+      } else if (progress < 0.55) {
         setTheme("light");
-      } else {
+      } else if (progress < 0.8) {
         setTheme("dark");
+      } else {
+        setTheme("light");
       }
     };
 
@@ -74,8 +74,12 @@ export default function HomePage() {
       >
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
-            <div className="relative h-8 w-8 overflow-hidden rounded-2xl bg-gradient-to-br from-sky-400 via-emerald-300 to-violet-400">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_0,rgba(255,255,255,0.35)_0,transparent_45%)]" />
+            <div className="relative h-9 w-9 overflow-hidden rounded-2xl bg-gradient-to-br from-sky-400 via-emerald-300 to-violet-400">
+              <motion.div
+                className="absolute inset-0 bg-[radial-gradient(circle_at_30%_0,rgba(255,255,255,0.45)_0,transparent_50%)]"
+                animate={{ rotate: [0, 10, -8, 0] }}
+                transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+              />
             </div>
             <div className="flex flex-col leading-none">
               <span className="text-[11px] font-semibold tracking-[0.26em] uppercase">
@@ -94,6 +98,7 @@ export default function HomePage() {
               ["Playbook", "#playbook"],
               ["Cas clients", "#cas-clients"],
               ["Cas d’usage", "#usage"],
+              ["Stack", "#stack"],
               ["Offres", "#offres"],
               ["FAQ", "#faq"],
             ].map(([label, href]) => (
@@ -124,16 +129,27 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* HERO avec background “vivant” */}
+      {/* HERO / SECTION 1 : CINÉMATIQUE */}
       <section
         id="hero"
         className="relative overflow-hidden border-b border-white/10"
       >
-        {/* décor : blobs + grille + orbes */}
+        {/* fond animé : blobs + grille + halo tournant */}
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute -top-40 -left-32 h-96 w-96 rounded-full bg-sky-500/20 blur-3xl animate-pulse" />
-          <div className="absolute -bottom-32 -right-24 h-[420px] w-[420px] rounded-full bg-emerald-400/15 blur-3xl animate-[ping_5s_ease-in-out_infinite]" />
-          <div className="absolute -bottom-40 left-1/3 h-72 w-72 rounded-full bg-violet-500/20 blur-3xl mix-blend-screen" />
+          <motion.div
+            className="absolute -top-40 -left-32 h-96 w-96 rounded-full bg-sky-500/20 blur-3xl"
+            animate={{ y: [-10, 10, -10], x: [-12, 8, -16] }}
+            transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div
+            className="absolute -bottom-32 -right-24 h-[420px] w-[420px] rounded-full bg-emerald-400/18 blur-3xl"
+            animate={{ y: [10, -8, 10], x: [6, -6, 4] }}
+            transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div
+            className="absolute left-1/2 top-1/2 h-[520px] w-[520px] -translate-x-1/2 -translate-y-1/2 rounded-[40%] border border-white/10 bg-gradient-to-br from-slate-900/60 via-slate-900/20 to-slate-900/70"
+            style={{ rotate: scrollProgress * 40 - 20 }}
+          />
           <div className="absolute inset-0 opacity-[0.22] [background-image:radial-gradient(circle_at_1px_1px,#64748b80,transparent_0)] [background-size:22px_22px]" />
         </div>
 
@@ -207,22 +223,26 @@ export default function HomePage() {
               </span>
             </motion.div>
 
-            {/* mini “ticker” */}
+            {/* ticker défilant */}
             <motion.div
               variants={fadeUp}
               className="mt-8 overflow-hidden rounded-full border border-white/10 bg-black/30 text-[10px] text-slate-300"
             >
-              <div className="flex animate-[marquee_18s_linear_infinite] gap-10 whitespace-nowrap px-4 py-2 [--gap:2.5rem]">
-                <span>Notion &amp; knowledge interne</span>
-                <span>CRM &amp; pipe commercial</span>
-                <span>Inbox &amp; DM centralisés</span>
+              <motion.div
+                className="flex gap-10 whitespace-nowrap px-4 py-2"
+                animate={{ x: ["0%", "-50%", "0%"] }}
+                transition={{ duration: 26, repeat: Infinity, ease: "linear" }}
+              >
+                <span>Notion & knowledge interne</span>
+                <span>CRM & pipe commercial</span>
+                <span>Inbox & DM centralisés</span>
                 <span>Reporting temps réel</span>
                 <span>Front minimaliste mais sérieux</span>
-              </div>
+              </motion.div>
             </motion.div>
           </motion.div>
 
-          {/* Colonne droite : “système vivant” */}
+          {/* Colonne droite : “OS vivant” */}
           <motion.div
             initial={{ opacity: 0, x: 60 }}
             animate={{ opacity: 1, x: 0 }}
@@ -230,14 +250,14 @@ export default function HomePage() {
             className="relative flex-1"
           >
             <motion.div
-              animate={{ y: [-8, 6, -8] }}
+              animate={{ y: [-10, 8, -10] }}
               transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-              className="relative rounded-3xl border border-white/10 bg-gradient-to-br from-slate-900/95 via-slate-900/80 to-slate-900/95 p-5 backdrop-blur-2xl shadow-[0_20px_70px_rgba(15,23,42,0.8)]"
+              className="relative rounded-3xl border border-white/10 bg-gradient-to-br from-slate-900/95 via-slate-900/80 to-slate-900/95 p-5 backdrop-blur-2xl shadow-[0_22px_80px_rgba(15,23,42,0.9)]"
             >
               <div className="mb-4 flex items-center justify-between text-[11px] text-slate-300">
                 <span>NH110LAB / Operating System</span>
                 <span className="rounded-full border border-emerald-300/40 bg-emerald-300/10 px-3 py-1 text-[10px] text-emerald-200">
-                  Modulaire &amp; concret
+                  Modulaire & concret
                 </span>
               </div>
 
@@ -247,7 +267,7 @@ export default function HomePage() {
                     Front
                   </p>
                   <p className="mt-2 text-slate-200">
-                    Sites &amp; mini-apps ultra lisibles, pensés pour inspirer
+                    Sites & mini-apps ultra lisibles, pensés pour inspirer
                     confiance en 5 secondes.
                   </p>
                 </div>
@@ -323,7 +343,7 @@ export default function HomePage() {
               </div>
             </motion.div>
 
-            {/* petits orbes flottants */}
+            {/* orbes flottants */}
             <motion.div
               className="pointer-events-none absolute -right-4 -top-6 h-16 w-16 rounded-full border border-sky-400/50 bg-sky-400/20"
               animate={{ y: [-4, 6, -4], x: [0, 4, 0] }}
@@ -341,10 +361,10 @@ export default function HomePage() {
       {/* SECTION SYSTÈME */}
       <motion.section
         id="system"
-        className="border-b border-white/10 py-16"
+        className="border-b border-white/10 bg-slate-950 py-16"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
+        viewport={{ once: true, amount: 0.35 }}
         variants={fadeUp}
         transition={sectionTransition}
       >
@@ -375,7 +395,7 @@ export default function HomePage() {
             ].map((b) => (
               <motion.div
                 key={b.title}
-                whileHover={{ y: -4, scale: 1.01 }}
+                whileHover={{ y: -4, scale: 1.02 }}
                 className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] p-5"
               >
                 <div className="absolute -right-6 -top-6 h-16 w-16 rounded-full bg-gradient-to-br from-sky-500/25 to-transparent blur-2xl" />
@@ -387,7 +407,7 @@ export default function HomePage() {
         </div>
       </motion.section>
 
-      {/* PLAYBOOK / MODE CLAIR */}
+      {/* PLAYBOOK (mode clair) */}
       <motion.section
         id="playbook"
         className="border-b border-slate-200/70 bg-slate-50 py-16 text-slate-900 transition-colors duration-700"
@@ -512,8 +532,9 @@ export default function HomePage() {
                 text: "Agent de réservation connecté aux messageries & Google, centralisation des demandes, relance automatique des no-show.",
               },
             ].map((c) => (
-              <div
+              <motion.div
                 key={c.label}
+                whileHover={{ y: -4 }}
                 className="flex flex-col justify-between rounded-2xl border border-white/10 bg-white/[0.03] p-5"
               >
                 <div>
@@ -526,7 +547,7 @@ export default function HomePage() {
                   Résultat : moins de charge mentale, plus de répondant, image
                   beaucoup plus solide.
                 </p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -585,8 +606,9 @@ export default function HomePage() {
                 ],
               },
             ].map((u) => (
-              <div
+              <motion.div
                 key={u.title}
+                whileHover={{ y: -4, scale: 1.01 }}
                 className="rounded-2xl border border-white/10 bg-white/[0.03] p-5"
               >
                 <h3 className="text-sm font-semibold">{u.title}</h3>
@@ -595,8 +617,90 @@ export default function HomePage() {
                     <li key={i}>• {i}</li>
                   ))}
                 </ul>
-              </div>
+              </motion.div>
             ))}
+          </div>
+        </div>
+      </motion.section>
+
+      {/* STACK / “COMME UNE GROSSE BOÎTE” */}
+      <motion.section
+        id="stack"
+        className="border-b border-white/10 bg-slate-950 py-16"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.35 }}
+        variants={fadeUp}
+      >
+        <div className="mx-auto max-w-6xl px-4">
+          <p className="text-[11px] uppercase tracking-[0.25em] text-slate-400">
+            Stack & opérations
+          </p>
+          <h2 className="mt-2 text-2xl font-semibold md:text-3xl">
+            Une stack de grande boîte,
+            <br />
+            sans la lourdeur de la grande boîte.
+          </h2>
+
+          <div className="mt-8 grid gap-6 md:grid-cols-[1.1fr,0.9fr]">
+            <div className="space-y-4 rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+              <p className="text-[11px] uppercase tracking-[0.2em] text-slate-400">
+                Briques fréquentes
+              </p>
+              <div className="flex flex-wrap gap-2 text-[11px] text-slate-200">
+                {[
+                  "Notion",
+                  "Airtable",
+                  "HubSpot",
+                  "Pipedrive",
+                  "Stripe",
+                  "Make / n8n",
+                  "Slack",
+                  "Gmail / GSuite",
+                  "API custom",
+                ].map((t) => (
+                  <span
+                    key={t}
+                    className="rounded-full border border-white/10 bg-white/5 px-3 py-1"
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+              <p className="text-xs text-slate-300">
+                On ne vous impose pas un outil “magique” : on se branche sur
+                l’existant, on simplifie, puis on ajoute les briques IA là où
+                ça fait vraiment la différence.
+              </p>
+            </div>
+
+            <div className="space-y-3 rounded-2xl border border-white/10 bg-gradient-to-br from-slate-900/90 via-slate-900/70 to-slate-900/95 p-5">
+              <p className="text-[11px] uppercase tracking-[0.2em] text-slate-400">
+                Indicateurs que l’on regarde
+              </p>
+              <ul className="space-y-2 text-xs text-slate-200">
+                <li>• Temps gagné sur des tâches répétitives.</li>
+                <li>• Délai moyen de réponse par canal.</li>
+                <li>• Part des demandes gérées 100% par l’IA.</li>
+                <li>• Accélération entre premier contact et closing.</li>
+              </ul>
+              <div className="mt-3 h-28 overflow-hidden rounded-xl border border-white/10 bg-slate-900/80 p-3">
+                <p className="text-[10px] uppercase tracking-[0.2em] text-slate-500">
+                  Sentiment “grosse boîte”
+                </p>
+                <motion.div
+                  className="mt-3 h-2 w-full rounded-full bg-slate-800"
+                  initial={{ scaleX: 0.3, originX: 0 }}
+                  whileInView={{ scaleX: 0.9 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 1.4, ease: "easeOut" }}
+                />
+                <p className="mt-2 text-[11px] text-slate-400">
+                  On cherche cet effet “ah ok, c’est carré” dès les 10
+                  premières secondes sur votre site.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </motion.section>
@@ -620,7 +724,10 @@ export default function HomePage() {
           </h2>
 
           <div className="mt-8 grid gap-4 md:grid-cols-2">
-            <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+            <motion.div
+              whileHover={{ y: -6, scale: 1.01 }}
+              className="rounded-2xl border border-white/10 bg-white/[0.03] p-5"
+            >
               <h3 className="text-sm font-semibold">Pilote IA complet</h3>
               <p className="mt-2 text-sm text-sky-300">1 500 – 3 500 €</p>
               <ul className="mt-3 space-y-1.5 text-xs text-slate-300">
@@ -635,8 +742,11 @@ export default function HomePage() {
               >
                 Démarrer un pilote →
               </a>
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+            </motion.div>
+            <motion.div
+              whileHover={{ y: -6, scale: 1.01 }}
+              className="rounded-2xl border border-white/10 bg-white/[0.03] p-5"
+            >
               <h3 className="text-sm font-semibold">Run & évolutions</h3>
               <p className="mt-2 text-sm text-emerald-300">Sur mesure</p>
               <ul className="mt-3 space-y-1.5 text-xs text-slate-300">
@@ -651,7 +761,7 @@ export default function HomePage() {
               >
                 Construire un mode run →
               </a>
-            </div>
+            </motion.div>
           </div>
         </div>
       </motion.section>
@@ -743,9 +853,7 @@ export default function HomePage() {
 
           <form className="mt-8 space-y-4">
             <div>
-              <label className="text-xs text-slate-300">
-                Nom / structure
-              </label>
+              <label className="text-xs text-slate-300">Nom / structure</label>
               <input
                 className="mt-1 w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-100 outline-none placeholder:text-slate-500 focus:border-white/40"
                 placeholder="Votre nom et/ou celui de votre structure"
@@ -792,3 +900,4 @@ export default function HomePage() {
     </main>
   );
 }
+
