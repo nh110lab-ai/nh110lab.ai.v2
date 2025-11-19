@@ -31,15 +31,20 @@ export default function HomePage() {
 
       setScrollProgress(progress);
 
-      // alternance auto clair / sombre selon la hauteur scrollée
-      if (progress < 0.25) {
+      // Mode clair / sombre auto + plus "intelligent"
+      const y = window.scrollY;
+      const h = window.innerHeight;
+
+      if (y < h * 0.9) {
         setTheme("dark");
-      } else if (progress < 0.55) {
+      } else if (y < h * 2) {
         setTheme("light");
-      } else if (progress < 0.8) {
+      } else if (y < h * 3.2) {
         setTheme("dark");
+      } else if (y < h * 4.4) {
+        setTheme("light");
       } else {
-        setTheme("light");
+        setTheme("dark");
       }
     };
 
@@ -48,16 +53,44 @@ export default function HomePage() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const isDark = theme === "dark";
+
   return (
     <main
-      className={`min-h-screen transition-colors duration-700 ${
-        theme === "dark"
-          ? "bg-slate-950 text-slate-50"
-          : "bg-slate-50 text-slate-900"
+      className={`min-h-screen font-sans transition-colors duration-700 ${
+        isDark ? "bg-slate-950 text-slate-50" : "bg-slate-50 text-slate-900"
       }`}
     >
-      {/* Barre de progression scroll */}
-      <div className="pointer-events-none fixed inset-x-0 top-0 z-[60] h-0.5 bg-transparent">
+      {/* BACKGROUND GLOBAL */}
+      <div className="pointer-events-none fixed inset-0 -z-10">
+        {/* couche dégradé */}
+        <motion.div
+          className="absolute inset-0 opacity-80"
+          animate={{
+            background:
+              scrollProgress < 0.5
+                ? [
+                    "radial-gradient(circle at 0% 0%, #0f172a, #020617)",
+                    "radial-gradient(circle at 100% 0%, #0f172a, #020617)",
+                  ]
+                : [
+                    "radial-gradient(circle at 0% 0%, #e0f2fe, #f9fafb)",
+                    "radial-gradient(circle at 100% 100%, #e0f2fe, #f9fafb)",
+                  ],
+          }}
+          transition={{ duration: 2.2, ease: "easeInOut" }}
+        />
+        {/* grille */}
+        <div className="absolute inset-0 opacity-[0.18] [background-image:radial-gradient(circle_at_1px_1px,#64748b80,transparent_0)] [background-size:22px_22px]" />
+        {/* halo tournant */}
+        <motion.div
+          className="absolute left-1/2 top-1/2 h-[700px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-[40%] border border-white/5 bg-gradient-to-br from-sky-500/15 via-transparent to-violet-500/15 blur-3xl"
+          style={{ rotate: scrollProgress * 50 - 25 }}
+        />
+      </div>
+
+      {/* BARRE DE PROGRESSION SCROLL */}
+      <div className="pointer-events-none fixed inset-x-0 top-0 z-[70] h-1 bg-transparent">
         <div
           className="h-full origin-left bg-gradient-to-r from-sky-400 via-emerald-400 to-violet-400 transition-transform duration-150"
           style={{ transform: `scaleX(${scrollProgress})` }}
@@ -67,7 +100,7 @@ export default function HomePage() {
       {/* NAVBAR */}
       <header
         className={`sticky top-0 z-50 border-b backdrop-blur-xl transition-colors duration-700 ${
-          theme === "dark"
+          isDark
             ? "border-white/10 bg-slate-950/80 text-slate-100"
             : "border-slate-200/70 bg-white/80 text-slate-900"
         }`}
@@ -94,10 +127,12 @@ export default function HomePage() {
           <nav className="hidden items-center gap-6 text-[11px] md:flex">
             {[
               ["Vision", "#hero"],
+              ["Manifesto", "#manifesto"],
               ["Système", "#system"],
               ["Playbook", "#playbook"],
               ["Cas clients", "#cas-clients"],
               ["Cas d’usage", "#usage"],
+              ["Lab", "#lab"],
               ["Stack", "#stack"],
               ["Offres", "#offres"],
               ["FAQ", "#faq"],
@@ -106,7 +141,7 @@ export default function HomePage() {
                 key={href}
                 href={href}
                 className={`transition-colors ${
-                  theme === "dark"
+                  isDark
                     ? "text-slate-300 hover:text-slate-50"
                     : "text-slate-700 hover:text-slate-950"
                 }`}
@@ -118,8 +153,8 @@ export default function HomePage() {
 
           <a
             href="#contact"
-            className={`rounded-full px-3.5 py-1.5 text-[11px] font-medium transition-all ${
-              theme === "dark"
+            className={`hidden rounded-full px-3.5 py-1.5 text-[11px] font-medium transition-all md:inline-flex ${
+              isDark
                 ? "border border-white/15 bg-white/5 text-slate-50 hover:bg-white hover:text-slate-950"
                 : "border border-slate-900/10 bg-slate-900 text-slate-50 hover:bg-slate-700"
             }`}
@@ -129,28 +164,29 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* HERO / SECTION 1 : CINÉMATIQUE */}
+      {/* HERO : CINÉMATIQUE PLUS AGRESSIVE */}
       <section
         id="hero"
         className="relative overflow-hidden border-b border-white/10"
       >
-        {/* fond animé : blobs + grille + halo tournant */}
+        {/* blobs + lignes */}
         <div className="pointer-events-none absolute inset-0">
           <motion.div
-            className="absolute -top-40 -left-32 h-96 w-96 rounded-full bg-sky-500/20 blur-3xl"
+            className="absolute -top-40 -left-32 h-96 w-96 rounded-full bg-sky-500/25 blur-3xl"
             animate={{ y: [-10, 10, -10], x: [-12, 8, -16] }}
+            transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div
+            className="absolute -bottom-32 -right-24 h-[420px] w-[420px] rounded-full bg-emerald-400/22 blur-3xl"
+            animate={{ y: [10, -8, 10], x: [6, -6, 4] }}
+            transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+          />
+          {/* bandes diagonales */}
+          <motion.div
+            className="absolute inset-x-[-40%] top-[35%] h-40 bg-gradient-to-r from-sky-400/20 via-transparent to-violet-500/20 blur-3xl"
+            animate={{ x: ["-10%", "10%", "-10%"] }}
             transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
           />
-          <motion.div
-            className="absolute -bottom-32 -right-24 h-[420px] w-[420px] rounded-full bg-emerald-400/18 blur-3xl"
-            animate={{ y: [10, -8, 10], x: [6, -6, 4] }}
-            transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
-          />
-          <motion.div
-            className="absolute left-1/2 top-1/2 h-[520px] w-[520px] -translate-x-1/2 -translate-y-1/2 rounded-[40%] border border-white/10 bg-gradient-to-br from-slate-900/60 via-slate-900/20 to-slate-900/70"
-            style={{ rotate: scrollProgress * 40 - 20 }}
-          />
-          <div className="absolute inset-0 opacity-[0.22] [background-image:radial-gradient(circle_at_1px_1px,#64748b80,transparent_0)] [background-size:22px_22px]" />
         </div>
 
         <div className="relative mx-auto flex max-w-6xl flex-col gap-14 px-4 pb-20 pt-16 md:flex-row md:items-center md:pt-24">
@@ -171,23 +207,26 @@ export default function HomePage() {
 
             <motion.h1
               variants={fadeUp}
-              className="mt-5 text-[2.4rem] font-semibold leading-tight md:text-[3.1rem]"
+              className="mt-5 text-[2.7rem] font-semibold leading-tight md:text-[3.4rem]"
             >
-              Construire un
+              Construire un{" "}
               <span className="block bg-gradient-to-r from-sky-300 via-emerald-300 to-violet-300 bg-clip-text text-transparent">
-                système IA qui fait “grosse boîte”
+                système IA qui impressionne
+              </span>{" "}
+              comme une grosse boîte,
+              <span className="block text-[1.5rem] text-slate-300">
+                en gardant la vitesse d’un solo founder.
               </span>
-              sans perdre la vitesse d’une petite équipe.
             </motion.h1>
 
             <motion.p
               variants={fadeUp}
               className="mt-4 text-sm text-slate-300 md:text-[15px]"
             >
-              NH110LAB.ai assemble trois couches : un front ultra lisible, des
-              agents IA bien encadrés et des automatisations propres. Objectif :
-              moins d’opérations manuelles, plus de répondant, et une impression
-              très “premium” dès le premier contact.
+              NH110LAB.ai assemble un front ultra clair, des agents IA
+              disciplinés et des automatisations propres. Objectif : que chaque
+              interaction avec votre marque déclenche un{" "}
+              <span className="font-semibold text-sky-300">“ok, c’est très carré.”</span>
             </motion.p>
 
             <motion.div
@@ -196,7 +235,7 @@ export default function HomePage() {
             >
               <a
                 href="#devis"
-                className="rounded-full bg-white px-5 py-2.5 text-xs font-semibold text-slate-950 shadow-lg shadow-sky-500/25 transition-shadow hover:shadow-sky-500/50"
+                className="rounded-full bg-white px-5 py-2.5 text-xs font-semibold text-slate-950 shadow-lg shadow-sky-500/25 transition-transform transition-shadow hover:-translate-y-0.5 hover:shadow-sky-500/50"
               >
                 Devis express en 30s
               </a>
@@ -223,7 +262,7 @@ export default function HomePage() {
               </span>
             </motion.div>
 
-            {/* ticker défilant */}
+            {/* ticker */}
             <motion.div
               variants={fadeUp}
               className="mt-8 overflow-hidden rounded-full border border-white/10 bg-black/30 text-[10px] text-slate-300"
@@ -231,18 +270,19 @@ export default function HomePage() {
               <motion.div
                 className="flex gap-10 whitespace-nowrap px-4 py-2"
                 animate={{ x: ["0%", "-50%", "0%"] }}
-                transition={{ duration: 26, repeat: Infinity, ease: "linear" }}
+                transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
               >
                 <span>Notion & knowledge interne</span>
                 <span>CRM & pipe commercial</span>
                 <span>Inbox & DM centralisés</span>
                 <span>Reporting temps réel</span>
                 <span>Front minimaliste mais sérieux</span>
+                <span>Agents IA qui respectent vos règles</span>
               </motion.div>
             </motion.div>
           </motion.div>
 
-          {/* Colonne droite : “OS vivant” */}
+          {/* Colonne droite : "OS vivant" + images */}
           <motion.div
             initial={{ opacity: 0, x: 60 }}
             animate={{ opacity: 1, x: 0 }}
@@ -252,7 +292,7 @@ export default function HomePage() {
             <motion.div
               animate={{ y: [-10, 8, -10] }}
               transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-              className="relative rounded-3xl border border-white/10 bg-gradient-to-br from-slate-900/95 via-slate-900/80 to-slate-900/95 p-5 backdrop-blur-2xl shadow-[0_22px_80px_rgba(15,23,42,0.9)]"
+              className="relative rounded-3xl border border-white/12 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 p-5 backdrop-blur-2xl shadow-[0_22px_80px_rgba(15,23,42,0.9)]"
             >
               <div className="mb-4 flex items-center justify-between text-[11px] text-slate-300">
                 <span>NH110LAB / Operating System</span>
@@ -276,8 +316,8 @@ export default function HomePage() {
                     Agents IA
                   </p>
                   <p className="mt-2 text-slate-200">
-                    Agents spécialisés (support, sales, back-office) qui
-                    respectent vos règles, votre ton, vos limites.
+                    Support, sales & back-office qui respectent votre ton, vos
+                    limites et vos priorités.
                   </p>
                 </div>
               </div>
@@ -306,7 +346,6 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* “fausse interface” + image */}
               <div className="mt-5 grid gap-4 md:grid-cols-[1.1fr,0.9fr]">
                 <div className="space-y-3 rounded-2xl border border-white/10 bg-slate-900/80 p-3">
                   <p className="text-[10px] uppercase tracking-[0.2em] text-slate-400">
@@ -338,6 +377,7 @@ export default function HomePage() {
                     src="https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?auto=compress&cs=tinysrgb&w=1200"
                     alt="Interface IA & automatisations"
                     className="h-full w-full object-cover"
+                    loading="lazy"
                   />
                 </div>
               </div>
@@ -358,7 +398,75 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* SECTION SYSTÈME */}
+      {/* MANIFESTO */}
+      <motion.section
+        id="manifesto"
+        className="border-b border-white/10 bg-slate-950 py-16"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.35 }}
+        variants={fadeUp}
+        transition={sectionTransition}
+      >
+        <div className="mx-auto max-w-6xl px-4">
+          <p className="text-[11px] uppercase tracking-[0.25em] text-slate-400">
+            Manifesto
+          </p>
+          <h2 className="mt-2 text-2xl font-semibold md:text-3xl">
+            L’IA ne doit pas juste “répondre”.
+            <br />
+            Elle doit faire <span className="text-sky-300">gagner du sérieux</span>
+            à votre marque.
+          </h2>
+
+          <div className="mt-8 grid gap-6 md:grid-cols-[1.4fr,0.9fr]">
+            <div className="space-y-4 text-sm text-slate-300">
+              <p>
+                On ne construit pas des jouets IA. On construit des{" "}
+                <span className="font-semibold">systèmes</span> : des pièces qui
+                s’emboîtent, qui se surveillent, et qui se branchent à votre
+                organisation réelle.
+              </p>
+              <p>
+                Pas de promesse floue, pas de dashboard que personne n’ouvre.
+                Juste :
+              </p>
+              <ul className="mt-2 space-y-1.5 text-xs text-slate-300">
+                <li>• Des flux qui vous enlèvent du bruit opérationnel.</li>
+                <li>
+                  • Une présence en ligne qui fait “grosse boîte” sans perdre
+                  votre personnalité.
+                </li>
+                <li>
+                  • Des agents IA qui s’excusent, escaladent et respectent vos
+                  règles quand il faut.
+                </li>
+              </ul>
+            </div>
+
+            <div className="space-y-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-xs text-slate-200">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-slate-400">
+                Ce que vous obtiendrez
+              </p>
+              <p>
+                • Un système documenté, pas une boîte noire.
+                <br />
+                • Une stack que vous possédez (Notion, CRM, automatisations).
+                <br />• Un front qui donne envie de travailler avec vous.
+              </p>
+              <p className="pt-2 text-[10px] text-slate-400">
+                Le but : qu’un prospect se dise en 10 secondes :{" "}
+                <span className="italic text-sky-300">
+                  “Ils sont petits… mais ils sont organisés comme une grosse
+                  structure.”
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </motion.section>
+
+      {/* SYSTÈME */}
       <motion.section
         id="system"
         className="border-b border-white/10 bg-slate-950 py-16"
@@ -382,7 +490,7 @@ export default function HomePage() {
             {[
               {
                 title: "Couche front",
-                desc: "Site, mini-portail client, back-office : la surface visible qui donne le ton.",
+                desc: "Site, portail client, mini-back-office : la surface visible qui donne le ton.",
               },
               {
                 title: "Couche IA",
@@ -390,12 +498,12 @@ export default function HomePage() {
               },
               {
                 title: "Couche automatisation",
-                desc: "Orchestration des e-mails, CRM, DM, docs, agendas, facturation…",
+                desc: "Orchestration des emails, CRM, DM, docs, agendas, facturation…",
               },
             ].map((b) => (
               <motion.div
                 key={b.title}
-                whileHover={{ y: -4, scale: 1.02 }}
+                whileHover={{ y: -6, scale: 1.02 }}
                 className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] p-5"
               >
                 <div className="absolute -right-6 -top-6 h-16 w-16 rounded-full bg-gradient-to-br from-sky-500/25 to-transparent blur-2xl" />
@@ -407,7 +515,7 @@ export default function HomePage() {
         </div>
       </motion.section>
 
-      {/* PLAYBOOK (mode clair) */}
+      {/* PLAYBOOK (CLAIR) */}
       <motion.section
         id="playbook"
         className="border-b border-slate-200/70 bg-slate-50 py-16 text-slate-900 transition-colors duration-700"
@@ -623,7 +731,66 @@ export default function HomePage() {
         </div>
       </motion.section>
 
-      {/* STACK / “COMME UNE GROSSE BOÎTE” */}
+      {/* LAB / IMAGES / AMBIANCE */}
+      <motion.section
+        id="lab"
+        className="border-b border-white/10 bg-slate-950 py-16"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.35 }}
+        variants={fadeUp}
+      >
+        <div className="mx-auto max-w-6xl px-4">
+          <p className="text-[11px] uppercase tracking-[0.25em] text-slate-400">
+            NH110LAB / Lab
+          </p>
+          <h2 className="mt-2 text-2xl font-semibold md:text-3xl">
+            Un studio qui teste en continu,
+            <br />
+            avant d’implanter chez vous.
+          </h2>
+
+          <div className="mt-8 grid gap-5 md:grid-cols-[1.1fr,0.9fr]">
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/5">
+                <img
+                  src="https://images.pexels.com/photos/1181467/pexels-photo-1181467.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                  alt="Workspace IA"
+                  className="h-full w-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+              <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/5">
+                <img
+                  src="https://images.pexels.com/photos/3861964/pexels-photo-3861964.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                  alt="Dashboard et graphes"
+                  className="h-full w-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-3 text-sm text-slate-300">
+              <p>
+                Avant de déployer une nouvelle brique IA chez vous, on la teste
+                dans le Lab : prompts, règles, scénarios d’échec, escalade vers
+                l’humain.
+              </p>
+              <p className="text-xs text-slate-400">
+                Le but : vous livrer une version déjà “endurcie” par des
+                scénarios stressants, pas un simple proof of concept fragile.
+              </p>
+              <ul className="mt-2 space-y-1.5 text-xs text-slate-300">
+                <li>• Tests de ton & de style d’écriture.</li>
+                <li>• Tests de limites : ce que l’IA ne doit pas faire.</li>
+                <li>• Tests de charge : comment le système tient quand ça explose.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </motion.section>
+
+      {/* STACK */}
       <motion.section
         id="stack"
         className="border-b border-white/10 bg-slate-950 py-16"
@@ -696,8 +863,8 @@ export default function HomePage() {
                   transition={{ duration: 1.4, ease: "easeOut" }}
                 />
                 <p className="mt-2 text-[11px] text-slate-400">
-                  On cherche cet effet “ah ok, c’est carré” dès les 10
-                  premières secondes sur votre site.
+                  On cherche cet effet “ah ok, c’est carré” dès les 10 premières
+                  secondes sur votre site.
                 </p>
               </div>
             </div>
@@ -725,7 +892,7 @@ export default function HomePage() {
 
           <div className="mt-8 grid gap-4 md:grid-cols-2">
             <motion.div
-              whileHover={{ y: -6, scale: 1.01 }}
+              whileHover={{ y: -6, scale: 1.02 }}
               className="rounded-2xl border border-white/10 bg-white/[0.03] p-5"
             >
               <h3 className="text-sm font-semibold">Pilote IA complet</h3>
@@ -744,7 +911,7 @@ export default function HomePage() {
               </a>
             </motion.div>
             <motion.div
-              whileHover={{ y: -6, scale: 1.01 }}
+              whileHover={{ y: -6, scale: 1.02 }}
               className="rounded-2xl border border-white/10 bg-white/[0.03] p-5"
             >
               <h3 className="text-sm font-semibold">Run & évolutions</h3>
@@ -900,4 +1067,3 @@ export default function HomePage() {
     </main>
   );
 }
-
