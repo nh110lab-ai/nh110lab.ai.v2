@@ -29,11 +29,11 @@ export function DevisExpress() {
   return (
     <section
       id="devis"
-      className="py-24 px-4 bg-gradient-to-b from-slate-950 via-slate-950 to-slate-900 border-t border-white/10"
+      className="border-y border-white/5 bg-gradient-to-b from-slate-950 via-slate-950 to-slate-900 py-20 px-4"
     >
-      <div className="max-w-4xl mx-auto">
+      <div className="mx-auto max-w-4xl">
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 32 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
@@ -45,17 +45,19 @@ export function DevisExpress() {
                 Devis express
               </p>
               <h2 className="text-2xl md:text-3xl font-semibold text-white mt-1">
-                Obtiens une estimation réaliste en quelques secondes.
+                Obtenez une estimation réaliste en quelques secondes.
               </h2>
               <p className="text-sm text-slate-400 mt-2 max-w-xl">
-                Choisis ton type de projet et ton timing. Je te renvoie ensuite une proposition claire et actionnable.
+                Choisissez votre type de projet et votre timing. Ensuite, je
+                reviens vers vous avec une proposition détaillée et actionnable.
               </p>
             </div>
             <span className="inline-flex items-center gap-2 text-xs text-emerald-300 bg-emerald-300/10 border border-emerald-300/30 px-3 py-1 rounded-full">
-              ⚡ï¸ Réponse détaillée sous 24–48h
+              ⚡ Réponse détaillée sous 24–48h
             </span>
           </div>
 
+          {/* Type de projet */}
           <div className="space-y-3 mb-6">
             <p className="text-xs font-medium text-slate-300 uppercase tracking-[0.15em]">
               1 · Type de projet
@@ -69,14 +71,14 @@ export function DevisExpress() {
                   className={
                     "text-left px-4 py-3 rounded-2xl border text-sm transition-all bg-white/0 hover:bg-white/5" +
                     (projectType === p.id
-                      ? " border-white/60 bg-white/10 shadow-lg shadow-black/40"
-                      : " border-white/10")
+                      ? " border-white/70 bg-white/10 shadow-lg shadow-black/50"
+                      : " border-white/15")
                   }
                 >
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-slate-50">{p.label}</span>
                     <span className="text-xs text-slate-400">
-                      ~ {p.base.toLocaleString('fr-FR')} €
+                      ~ {p.base.toLocaleString("fr-FR")} €
                     </span>
                   </div>
                 </button>
@@ -84,6 +86,7 @@ export function DevisExpress() {
             </div>
           </div>
 
+          {/* Délai */}
           <div className="space-y-3 mb-8">
             <p className="text-xs font-medium text-slate-300 uppercase tracking-[0.15em]">
               2 · Délai souhaité
@@ -97,8 +100,8 @@ export function DevisExpress() {
                   className={
                     "px-4 py-2 rounded-full border text-xs md:text-sm transition-all" +
                     (delay === d.id
-                      ? " border-white/60 bg-white/10 shadow-lg shadow-black/40"
-                      : " border-white/10 bg-white/0 hover:bg-white/5")
+                      ? " border-white/70 bg-white/10 shadow-lg shadow-black/50"
+                      : " border-white/15 bg-white/0 hover:bg-white/5")
                   }
                 >
                   {d.label}
@@ -107,6 +110,7 @@ export function DevisExpress() {
             </div>
           </div>
 
+          {/* Résultat + CTA */}
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <motion.div
               key={estimation}
@@ -115,13 +119,14 @@ export function DevisExpress() {
               transition={{ duration: 0.25 }}
             >
               <p className="text-xs text-slate-400 uppercase tracking-[0.15em]">
-                Estimation
+                Estimation indicative
               </p>
               <p className="text-3xl md:text-4xl font-semibold text-white mt-1">
-                ~ {estimation.toLocaleString('fr-FR')} €
+                ~ {estimation.toLocaleString("fr-FR")} €
               </p>
               <p className="text-sm text-slate-400 mt-1 max-w-md">
-                Montant indicatif pour un pilote IA concret, ajusté selon tes cas d’usage et tes outils actuels.
+                Budget estimatif pour un pilote IA concret. Le chiffrage final
+                dépendra de vos cas d&apos;usage, outils, et volumes.
               </p>
             </motion.div>
 
@@ -136,7 +141,7 @@ export function DevisExpress() {
                 href="#contact"
                 className="text-xs text-slate-300 hover:text-white"
               >
-                Ou décrire un cas spécifique →
+                Ou décrire un cas très spécifique →
               </a>
             </div>
           </div>
